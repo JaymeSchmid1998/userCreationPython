@@ -40,23 +40,18 @@ def CreateUserId():
         objText.close()
         my_file.unlink()
         print('file found')
-        try:
-            clf = nfc.ContactlessFrontend('tty:USB0:pn532')
-            clf.connect(llcp={})
-            def on_connect(llc):
-                threading.Thread(target=llc.run).start(); return False
-            llc = clf.connect(llcp={'on-connect': on_connect})
-            print (llc)
-            snep = nfc.snep.SnepClient(llc)
-            snep.put_records([ndef.TextRecord(mytext1, "de")])
-            GPIO.output(22,0)
-            clf.close()
-        except: 
-            clf.close()
-            print('error')
-            GPIO.output(12,1)
-            GPIO.output(22,0)
-            GPIO.output(20,0)
+        
+        clf = nfc.ContactlessFrontend('tty:USB0:pn532')
+        clf.connect(llcp={})
+        def on_connect(llc):
+            threading.Thread(target=llc.run).start(); return False
+        llc = clf.connect(llcp={'on-connect': on_connect})
+        print (llc)
+        snep = nfc.snep.SnepClient(llc)
+        snep.put_records([ndef.TextRecord(mytext1, "de")])
+        GPIO.output(22,0)
+        clf.close()
+        
         
     else:
         print('no file found')
